@@ -13,12 +13,9 @@
 
 ## Cài đặt
 
-Cần Python 3.10+ và key Groq API (đăng ký miễn phí tại console.groq.com).
+Cần Python 3.10+ và API key.
 
 ```bash
-git clone https://github.com/ccthhne/English-Chatbot.git
-cd English-Chatbot
-
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
