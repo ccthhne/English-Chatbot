@@ -1,0 +1,31 @@
+# ===== Python =====
+# Môi trường ảo (tự cài lại: pip install -r requirements.txt)
+.venv/
+venv/
+# File biên dịch (tự sinh lại khi chạy)
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== Database =====
+# dictionary.db 193MB: vượt giới hạn 100MB/file của GitHub, sinh lại bằng import_avdict.py
+# users.db: dữ liệu người dùng, không public
+data/*.db
+*.db
+
+# ===== Audio nghe offline (~300MB) =====
+# Lưu riêng 6 file ZIP trên Google Drive, ai cần thì tải về giải nén vào static/audio/
+# Thiếu file local app tự phát link VOA online nên repo không audio vẫn chạy demo được
+static/audio/
+
+# ===== File nén lớn =====
+*.zip
+
+# ===== Secret: KHÔNG bao giờ commit key/token =====
+.env
+*.pem
+*.key
+
+# ===== Khác =====
+.DS_Store
+Thumbs.db

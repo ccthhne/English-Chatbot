@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Tutor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="/static/style.css?v=17">
+    <!-- 12/10/2026: đặt theme sáng/tối trước khi vẽ trang để không chớp -->
+    <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('appTheme')||'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}</script>
+    <!-- 12/10/2026: dữ liệu level Oxford nhúng sẵn từ server — vào Oxford là thấy ngay -->
+    <script>window.__OXFORD_PRELOAD__ = {{ oxford_preload | tojson }};</script>
+</head>
+<body>
+    <div class="app-shell">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="ri-graduation-cap-fill"></i>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">English Tutor</div>
+                        <div class="brand-sub">Learn English with AI</div>
+                    </div>
+                </div>
+                <button class="btn-new-chat" id="btnNewChat">
+                    <i class="ri-add-line"></i>
+                    Cuộc trò chuyện mới
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+                    <i class="ri-home-line"></i>
+                    <span>Trang chủ</span>
+                </button>
+                <button class="nav-item" data-tab="chat" onclick="switchTab('chat')">
+                    <i class="ri-chat-3-line"></i>
+                    <span>Chat</span>
+                </button>
+                <button class="nav-item" data-tab="cefr" onclick="switchTab('cefr')">
+                    <i class="ri-bar-chart-grouped-line"></i>
+                    <span>Phân tích CEFR</span>
+                </button>
+                <button class="nav-item" data-tab="flashcard" onclick="switchTab('flashcard')">
+                    <i class="ri-layers-line"></i>
+                    <span>Flashcard</span>
+                </button>
+                <button class="nav-item" data-tab="reading" onclick="switchTab('reading')">
+                    <i class="ri-book-open-line"></i>
+                    <span>Bài đọc</span>
+                </button>
+                <button class="nav-item" data-tab="listening" onclick="switchTab('listening')">
+                    <i class="ri-headphone-line"></i>
+                    <span>Luyện nghe</span>
+                </button>
+                <button class="nav-item" data-tab="lesson" onclick="switchTab('lesson')">
+                    <i class="ri-sparkles-line"></i>
+                    <span>Bài học AI</span>
+                </button>
+                <button class="nav-item" data-tab="progress" onclick="switchTab('progress')">
+                    <i class="ri-line-chart-line"></i>
+                    <span>Tiến bộ</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-section-label">Lịch sử</div>
+            <div class="sidebar-history" id="historyList">
+                <div class="history-empty">Chưa có cuộc trò chuyện nào</div>
+            </div>
+
+            <div class="sidebar-footer">
+                <i class="ri-information-line"></i>
+                <span>Hỏi về từ vựng, ngữ pháp, dịch thuật theo chuẩn CEFR</span>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN ===== -->
+        <main class="main">
+
+            <!-- HEADER -->
+            <header class="topbar">
+                <div class="topbar-title" id="topbarTitle">
+                    <i class="ri-home-line"></i>
+                    <span>Trang chủ</span>
+                </div>
+                <div class="topbar-actions">
+                    <button class="btn-bookmark" id="btnBookmark" onclick="toggleBookmarkPanel()" title="Từ đã lưu">
+                        <i class="ri-bookmark-line"></i>
+                        <span class="bookmark-count" id="bookmarkCount" style="display:none">0</span>
+                    </button>
+                    <button class="btn-bookmark" id="btnTheme" onclick="toggleTheme()" title="Đổi giao diện sáng/tối">
+                        <i class="ri-sun-line" id="themeIcon"></i>
+                    </button>
+                    <button class="auth-user-btn" id="authUserBtn" style="display:none" onclick="doLogout()" title="Đăng xuất">
+                        <i class="ri-user-line"></i><span id="authUserName"></span><i class="ri-logout-box-r-line"></i>
+                    </button>
+                    <button class="auth-login-btn" id="authLoginBtn" onclick="showAuthModal()" title="Đăng nhập">
+                        <i class="ri-login-box-line"></i><span>Đăng nhập</span>
+                    </button>
+                    <div class="topbar-meta">
+                        <span class="status-dot"></span>
+                        <span>AI Tutor · CEFR</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- SAVED WORDS PANEL -->
+            <div class="saved-words-panel" id="savedWordsPanel">
+                <div class="swp-header">
+                    <div class="swp-title"><i class="ri-bookmark-fill"></i> Từ đã lưu</div>
+                    <button class="swp-close" onclick="toggleBookmarkPanel()"><i class="ri-close-line"></i></button>
+                </div>
+                <div class="swp-body" id="savedWordsList"></div>
+            </div>
+            <div class="swp-backdrop" id="swpBackdrop" onclick="toggleBookmarkPanel()"></div>
+
+            <!-- ===== CHAT TAB ===== -->
+            <!-- ===== TAB: TRANG CHỦ ===== -->
+            <div class="tab-content active" id="tab-home">
+                <div class="home-wrap">
+                    <div class="home-greet">
+                        <div>
+                            <h2 id="homeGreetTitle">Chào bạn</h2>
+                            <p id="homeGreetDate"></p>
+                        </div>
+                        <button class="home-cta" onclick="switchTab('chat')">
+                            <i class="ri-chat-3-line"></i> Vào học ngay
+                        </button>
+                    </div>
+
+                    <!-- 12/10/2026: 2 cột — trái: Tiến trình + Từ vựng ngẫu nhiên, phải: Khám phá -->
+                    <div class="home-cols">
+                    <div class="home-col-main">
+                    <div class="home-sec">
+                        <div class="home-sec-head">
+                            <h3><i class="ri-line-chart-line"></i> Tiến trình học tập</h3>
+                            <button class="home-link" onclick="switchTab('progress')">Xem chi tiết <i class="ri-arrow-right-line"></i></button>
+                        </div>
+                        <div class="home-stats" id="homeStats"></div>
+                    </div>
+
+                    <div class="home-sec">
+                        <div class="home-sec-head">
+                            <h3><i class="ri-shuffle-line"></i> Từ vựng ngẫu nhiên</h3>
+                        </div>
+                        <div class="rv-card" id="rvCard">
+                            <div class="rv-top">
+                                <span class="rv-title">Từ vựng ngẫu nhiên</span>
+                                <div class="rv-top-actions">
+                                    <button class="rv-link" onclick="showRvDetail(event)"><i class="ri-book-open-line"></i> Xem chi tiết</button>
+                                    <button class="rv-link rv-refresh" onclick="loadRandomVocab()"><i class="ri-refresh-line"></i> Từ khác</button>
+                                </div>
+                            </div>
+                            <div class="rv-wordrow">
+                                <span class="rv-word" id="rvWord">…</span>
+                                <span class="rv-cefr" id="rvCefr" style="display:none"></span>
+                                <span class="fc-pos" id="rvPos" style="display:none"></span>
+                            </div>
+                            <div class="rv-ipa" id="rvIpa"></div>
+                            <div class="rv-meaning" id="rvMeaning"></div>
+                            <div class="rv-example" id="rvExample" style="display:none"></div>
+                            <div class="rv-foot">
+                                <span class="rv-hint">Thấy từ hay? Lưu lại để ôn trong Flashcard.</span>
+                                <button class="rv-save" id="rvSaveBtn" onclick="saveRandomVocab()"><i class="ri-bookmark-line"></i> Lưu từ</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div><!-- /home-col-main -->
+                    <div class="home-col-side">
+                    <div class="home-sec">
+                        <div class="home-sec-head">
+                            <h3><i class="ri-compass-line"></i> Khám phá</h3>
+                        </div>
+                        <div class="home-links">
+                            <button class="home-link-card" onclick="switchTab('reading')">
+                                <i class="ri-book-open-line"></i>
+                                <div><b>Bài đọc song ngữ</b><span>42 bài VOA thật, quiz + hỏi AI</span></div>
+                                <i class="ri-arrow-right-line"></i>
+                            </button>
+                            <button class="home-link-card" onclick="switchTab('lesson')">
+                                <i class="ri-book-line"></i>
+                                <div><b>Bài học AI</b><span>Nhập chủ đề, AI soạn bài + chấm bài</span></div>
+                                <i class="ri-arrow-right-line"></i>
+                            </button>
+                            <button class="home-link-card" onclick="switchTab('flashcard')">
+                                <i class="ri-bank-card-line"></i>
+                                <div><b>Flashcard theo chủ đề</b><span>Oxford 3000/5000, 6 chủ đề đời sống</span></div>
+                                <i class="ri-arrow-right-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                    </div><!-- /home-col-side -->
+                    </div><!-- /home-cols -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-chat">
+
+                <!-- Welcome screen — kiểu Claude -->
+                <div class="welcome" id="welcome">
+                    <div class="welcome-hero">
+                        <span class="welcome-star">✦</span>
+                        <h1 class="welcome-title" id="welcomeTitle">Bắt đầu học tiếng Anh thôi?</h1>
+                    </div>
+
+                    <!-- Composer nằm giữa trang lúc welcome -->
+                    <div class="composer composer-centered">
+                        <div class="composer-inner">
+                            <button class="attach-btn" onclick="toggleDocsPopup(event)" title="Đính kèm tài liệu">
+                                <i class="ri-attachment-2"></i>
+                            </button>
+                            <textarea
+                                id="msgInput"
+                                placeholder="Hỏi bất cứ điều gì về tiếng Anh…"
+                                rows="1"
+                                onkeydown="handleKeydown(event)"
+                                oninput="autoResize(this)"
+                            ></textarea>
+                            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                                <i class="ri-send-plane-fill"></i>
+                            </button>
+                        </div>
+                        <div class="doc-chip" id="docChip" style="display:none">
+                            <i class="ri-file-text-line"></i><span id="docChipName"></span>
+                            <button onclick="clearChatDoc()" title="Gỡ tài liệu"><i class="ri-close-line"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="welcome-chips">
+                        <button class="chip" onclick="sendChip(this)">Từ 'accurate' nghĩa là gì? CEFR level?</button>
+                        <button class="chip" onclick="sendChip(this)">Khác nhau giữa 'believe' và 'trust'?</button>
+                        <button class="chip" onclick="sendChip(this)">Sửa câu: I have went to school yesterday.</button>
+                        <button class="chip" onclick="sendChip(this)">Dịch: Tôi đã học tiếng Anh được 3 năm.</button>
+                        <button class="chip" onclick="sendChip(this)">Giải thích 'borrow' và 'lend'.</button>
+                    </div>
+                </div>
+
+                <!-- 09/10/2026: banner chế độ hỏi đáp theo chủ đề ngữ pháp -->
+                <div class="grammar-banner" id="grammarBanner" style="display:none">
+                    <i class="ri-focus-3-line"></i>
+                    <span>Hỏi đáp phần: <b id="grammarBannerTitle"></b></span>
+                    <button onclick="exitGrammarMode()">Thoát</button>
+                </div>
+
+                <!-- Chat messages -->
+                <div class="chat-messages" id="chatMessages"></div>
+
+                <!-- Composer bên dưới khi đang chat -->
+                <div class="composer composer-bottom" id="composerBottom" style="display:none">
+                    <div class="composer-inner">
+                        <button class="attach-btn" onclick="toggleDocsPopup(event)" title="Đính kèm tài liệu">
+                            <i class="ri-attachment-2"></i>
+                        </button>
+                        <textarea
+                            id="msgInputBottom"
+                            placeholder="Nhắn tin với English Tutor…"
+                            rows="1"
+                            onkeydown="handleKeydownBottom(event)"
+                            oninput="autoResize(this)"
+                        ></textarea>
+                        <button class="send-btn" id="sendBtnBottom" onclick="sendMessageBottom()">
+                            <i class="ri-send-plane-fill"></i>
+                        </button>
+                    </div>
+                    <div class="doc-chip" id="docChipBottom" style="display:none">
+                        <i class="ri-file-text-line"></i><span id="docChipNameBottom"></span>
+                        <button onclick="clearChatDoc()" title="Gỡ tài liệu"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="composer-hint">Enter để gửi · Shift+Enter xuống dòng</div>
+                </div>
+
+                <!-- Popup đính kèm tài liệu (08/10/2026): chọn file để chatbot trả lời theo nội dung file -->
+                <div class="docs-popup" id="docsPopup" style="display:none">
+                    <div class="docs-popup-head">
+                        <span><i class="ri-file-text-line"></i> Tài liệu đính kèm</span>
+                        <button onclick="toggleDocsPopup()" title="Đóng"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="docs-popup-hint">Chọn file để chatbot trả lời dựa trên nội dung file. Tối đa 50.000 ký tự/file.</div>
+                    <div id="docsPopupList" class="docs-list"></div>
+                    <input type="file" id="docsFileInput" accept=".txt,.md,.pdf" style="display:none">
+                    <button class="docs-upload-btn" onclick="document.getElementById('docsFileInput').click()">
+                        <i class="ri-upload-line"></i> Tải file lên
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== CEFR TAB ===== -->
+            <div class="tab-content" id="tab-cefr">
+                <div class="cefr-page">
+                    <div class="cefr-header">
+                        <h1><i class="ri-bar-chart-grouped-line"></i> Phân tích CEFR</h1>
+                        <p>Xem mức độ từ vựng trong một đoạn tiếng Anh theo chuẩn CEFR quốc tế.</p>
+                    </div>
+
+                    <div class="cefr-grid">
+                        <!-- Input panel -->
+                        <div class="cefr-input-panel">
+                            <label class="panel-label">
+                                <i class="ri-file-text-line"></i> Văn bản tiếng Anh
+                            </label>
+                            <textarea
+                                id="cefrInput"
+                                placeholder="Nhập đoạn văn tiếng Anh để phân tích CEFR..."
+                                rows="12"
+                            ></textarea>
+
+                            <button class="btn-analyze" onclick="analyzeCEFR()">
+                                <i class="ri-search-line"></i> Phân tích từ vựng
+                            </button>
+                            <button class="btn-analyze btn-analyze-full" onclick="analyzeCEFRFull()">
+                                <i class="ri-bar-chart-grouped-line"></i> Đánh giá toàn văn
+                            </button>
+                            <button class="btn-clear" onclick="document.getElementById('cefrInput').value=''">
+                                <i class="ri-delete-bin-line"></i> Xóa văn bản
+                            </button>
+
+                            <div class="cefr-examples">
+                                <div class="panel-label" style="margin-bottom:8px">
+                                    <i class="ri-lightbulb-line"></i> Ví dụ
+                                </div>
+                                <button class="example-btn" onclick="setCEFRExample(this)">
+                                    She has been studying English for three years and her vocabulary is improving rapidly.
+                                </button>
+                                <button class="example-btn" onclick="setCEFRExample(this)">
+                                    The weather forecast was surprisingly accurate and the temperature was comfortable.
+                                </button>
+                                <button class="example-btn" onclick="setCEFRExample(this)">
+                                    I believe that trust is the foundation of every successful relationship.
+                                </button>
+                            </div>
+
+                            <div class="cefr-note">
+                                <i class="ri-information-line"></i>
+                                <span>Phân tích tập trung vào <strong>từ vựng</strong>. CEFR đầy đủ cần đánh giá thêm Reading, Writing, Listening và Speaking.</span>
+                            </div>
+                        </div>
+
+                        <!-- Output panel -->
+                        <div class="cefr-output-panel" id="cefrOutput">
+                            <div class="cefr-empty">
+                                <div class="empty-icon"><i class="ri-bar-chart-grouped-line"></i></div>
+                                <div class="empty-title">Kết quả sẽ xuất hiện ở đây</div>
+                                <div class="empty-sub">Nhập văn bản và bấm "Phân tích CEFR"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB: FLASHCARD ===== -->
+            <div class="tab-content" id="tab-flashcard">
+                <div class="flash-wrap">
+
+                    <!-- Quick actions -->
+                    <div class="flash-quick">
+                        <button class="flash-quick-btn" onclick="buildSavedDeck()">
+                            <i class="ri-bookmark-line"></i>
+                            <span>Từ đã lưu (<span id="flashSavedCount">0</span>)</span>
+                        </button>
+                        <button class="flash-quick-btn" onclick="toggleRandomPanel()">
+                            <i class="ri-shuffle-line"></i>
+                            <span>Ngẫu nhiên theo level</span>
+                        </button>
+                    </div>
+                    <div class="flash-random-panel" id="flashRandomPanel" style="display:none">
+                        <div class="flash-levels">
+                            <button class="flash-level-chip" data-level="A1" onclick="setFlashLevel('A1')">A1</button>
+                            <button class="flash-level-chip" data-level="A2" onclick="setFlashLevel('A2')">A2</button>
+                            <button class="flash-level-chip" data-level="B1" onclick="setFlashLevel('B1')">B1</button>
+                            <button class="flash-level-chip active" data-level="B2" onclick="setFlashLevel('B2')">B2</button>
+                            <button class="flash-level-chip" data-level="C1" onclick="setFlashLevel('C1')">C1</button>
+                            <button class="flash-level-chip" data-level="C2" onclick="setFlashLevel('C2')">C2</button>
+                        </div>
+                        <div class="flash-random-row">
+                            <select id="flashCount" class="flash-count-select">
+                                <option value="10">10 thẻ</option>
+                                <option value="15" selected>15 thẻ</option>
+                                <option value="20">20 thẻ</option>
+                                <option value="30">30 thẻ</option>
+                            </select>
+                            <button class="flash-gen-btn" onclick="buildRandomDeck()">
+                                <i class="ri-refresh-line"></i> Tạo bộ thẻ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Browse: đề xuất + chủ đề -->
+                    <div id="flashBrowse">
+                        <div class="browse-sec">
+                            <div class="browse-head">
+                                <h3>Đề xuất</h3>
+                                <span class="browse-sub">Oxford 3000/5000 theo cấp độ CEFR</span>
+                            </div>
+                            <div class="deck-grid" id="deckGrid"></div>
+                        </div>
+                        <div class="browse-sec">
+                            <div class="browse-head">
+                                <h3>Chủ đề</h3>
+                                <span class="browse-sub">Từ vựng theo chủ đề đời sống</span>
+                                <div class="browse-nav">
+                                    <button class="browse-arrow" onclick="scrollTopics(-1)" title="Trước"><i class="ri-arrow-left-s-line"></i></button>
+                                    <button class="browse-arrow" onclick="scrollTopics(1)" title="Sau"><i class="ri-arrow-right-s-line"></i></button>
+                                    <button class="browse-all" id="browseAllBtn" onclick="toggleAllTopics()">Xem tất cả</button>
+                                </div>
+                            </div>
+                            <div class="topic-carousel" id="topicCarousel"></div>
+                        </div>
+                    </div>
+
+
+                    <!-- Oxford detail (chi tiet theo trinh do) -->
+                    <div id="oxfordDetail" style="display:none">
+                        <button class="oxd-back" onclick="hideOxfordDetail()">
+                            <i class="ri-arrow-left-line"></i> Tất cả khóa học
+                        </button>
+                        <div class="oxd-head">
+                            <div class="oxd-head-icon"><i id="oxdIcon" class="ri-book-line"></i></div>
+                            <div class="oxd-head-info">
+                                <h2 id="oxdTitle">Oxford 3000</h2>
+                                <p id="oxdDesc"></p>
+                                <div class="oxd-prog-row">
+                                    <span class="oxd-pct" id="oxdPct">0% đã học</span>
+                                    <span class="oxd-count" id="oxdCount"></span>
+                                </div>
+                                <div class="oxd-bar"><div id="oxdBarFill"></div></div>
+                            </div>
+                            <button class="oxd-main-btn" id="oxdMainBtn" onclick="startOxfordAll()">Bắt đầu học</button>
+                        </div>
+                        <div id="oxdLevels"></div>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div class="flash-empty" id="flashEmpty">
+                        <div class="empty-icon"><i class="ri-layers-line"></i></div>
+                        <div class="empty-title" id="flashEmptyTitle">Chưa có từ nào được lưu</div>
+                        <div class="empty-sub" id="flashEmptySub">Tra từ trong Chat rồi bấm "Lưu từ này" để thêm vào bộ flashcard.</div>
+                    </div>
+
+                    <!-- Deck -->
+                    <div class="flash-deck" id="flashDeck" style="display:none">
+                        <div class="flash-progress-row">
+                            <div class="flash-progress-track"><div class="flash-progress-bar" id="flashProgressBar"></div></div>
+                            <div class="flash-progress-text" id="flashProgressText">1 / 15</div>
+                        </div>
+                        <div class="flash-stats-row" id="flashStatsRow">
+                            <span class="flash-stat known"><i class="ri-check-line"></i> <b id="flashKnownCount">0</b> đã thuộc</span>
+                            <span class="flash-stat unknown"><i class="ri-close-line"></i> <b id="flashUnknownCount">0</b> chưa thuộc</span>
+                            <span class="flash-stat remain"><b id="flashRemainCount">15</b> còn lại</span>
+                            <button class="flash-more-btn" onclick="learnMoreWords()" title="Lấy thêm 15 từ mới">
+                                <i class="ri-add-line"></i> Thêm từ mới
+                            </button>
+                        </div>
+
+                        <div class="flashcard-scene">
+                            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                                <div class="flashcard-face flashcard-front">
+                                    <span class="flash-level-badge" id="flashLevelBadge">B2</span>
+                                    <div class="fc-center">
+                                        <div class="fc-wordrow">
+                                            <span class="fc-word" id="flashWord">word</span>
+                                            <span class="fc-pos" id="flashPosBadge" style="display:none"></span>
+                                        </div>
+                                        <div class="fc-iparow">
+                                            <span class="fc-ipa" id="flashIpa"></span>
+                                            <button class="fc-speak" onclick="event.stopPropagation();speakFlashWord()" title="Nghe phát âm"><i class="ri-volume-up-line"></i></button>
+                                        </div>
+                                        <div class="flash-topic-tag" id="flashTopicTag" style="display:none"></div>
+                                    </div>
+                                    <div class="fc-foot">
+                                        <button class="fc-pill-btn" onclick="event.stopPropagation();flipCard()">Xem nghĩa</button>
+                                        <div class="flash-hint"><i class="ri-cursor-line"></i> Nhấn vào thẻ để lật</div>
+                                    </div>
+                                </div>
+                                <div class="flashcard-face flashcard-back">
+                                    <div class="flash-back-scroll">
+                                        <div class="fc-wordrow">
+                                            <span class="fc-word fc-word-sm" id="flashWordBack">word</span>
+                                            <span class="fc-pos" id="flashPosBadgeBack" style="display:none"></span>
+                                        </div>
+                                        <div class="fc-iparow">
+                                            <span class="fc-ipa" id="flashIpaBack"></span>
+                                            <button class="fc-speak" onclick="event.stopPropagation();speakFlashWord()" title="Nghe phát âm"><i class="ri-volume-up-line"></i></button>
+                                        </div>
+                                        <div class="fc-main-meaning" id="flashMainMeaning"></div>
+                                        <div class="fc-defs" id="flashDefs"></div>
+                                        <div class="fc-example" id="flashExample"></div>
+                                        <div class="fc-foot">
+                                            <button class="fc-pill-btn" onclick="event.stopPropagation();flipCard()"><i class="ri-arrow-go-back-line"></i> Lật lại</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flash-nav">
+                            <button class="flash-nav-btn" onclick="prevCard()"><i class="ri-arrow-left-line"></i> Trước</button>
+                            <button class="flash-nav-btn" onclick="shuffleDeck()"><i class="ri-shuffle-line"></i> Xáo trộn</button>
+                            <button class="flash-nav-btn" onclick="nextCard()">Sau <i class="ri-arrow-right-line"></i></button>
+                        </div>
+                        <div class="flash-grade">
+                            <button class="flash-grade-btn flash-unknown-btn" onclick="gradeCard(false)"><i class="ri-close-line"></i> Chưa thuộc</button>
+                            <button class="flash-grade-btn flash-known-btn" onclick="gradeCard(true)"><i class="ri-check-line"></i> Đã thuộc</button>
+                        </div>
+                    </div>
+
+                    <!-- Nạp sâu ghi nhớ (08/10/2026): hiện luôn từ + nghĩa + ví dụ, chấm 1/2/3 -->
+                    <div class="deep-wrap" id="deepWrap" style="display:none">
+                        <div class="deep-progress-row">
+                            <div class="flash-progress-track"><div class="flash-progress-bar" id="deepProgressBar"></div></div>
+                            <div class="flash-progress-text" id="deepProgressText">1 / 15</div>
+                        </div>
+                        <div class="deep-card">
+                            <div class="deep-top">
+                                <span class="deep-word" id="deepWord">area</span>
+                                <span class="fc-pos" id="deepPosBadge" style="display:none"></span>
+                            </div>
+                            <div class="deep-ipa">
+                                <span id="deepIpa"></span>
+                                <button class="deep-speaker" onclick="speakDeepWord()" title="Nghe phát âm"><i class="ri-volume-up-line"></i></button>
+                            </div>
+                            <div class="deep-main" id="deepMain"></div>
+                            <div class="deep-defs" id="deepDefs"></div>
+                            <div class="deep-ex" id="deepEx"></div>
+                        </div>
+                        <div class="deep-actions">
+                            <button class="deep-btn" onclick="deepGrade('skip')">
+                                <span class="deep-key">1</span><i class="ri-skip-forward-line"></i> Bỏ qua
+                            </button>
+                            <button class="deep-btn deep-btn-primary" onclick="deepGrade('learn')">
+                                <span class="deep-key">2</span><i class="ri-graduation-cap-line"></i> Học
+                            </button>
+                            <button class="deep-btn" onclick="deepGrade('known')">
+                                <span class="deep-key">3</span><i class="ri-checkbox-circle-line"></i> Biết rồi
+                            </button>
+                        </div>
+                        <div class="deep-summary" id="deepSummary" style="display:none">
+                            <div class="deep-summary-stats">
+                                <span><b id="deepSumLearn">0</b> đang học</span>
+                                <span><b id="deepSumKnown">0</b> đã biết</span>
+                                <span><b id="deepSumSkip">0</b> bỏ qua</span>
+                            </div>
+                            <div class="flash-summary-actions">
+                                <button class="flash-gen-btn" onclick="reviewUnknown()"><i class="ri-repeat-line"></i> Học lại từ chưa thuộc</button>
+                                <button class="flash-gen-btn" onclick="deepBackToBrowse()"><i class="ri-arrow-left-line"></i> Về danh sách</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="flash-summary" id="flashSummary" style="display:none">
+                        <div class="empty-icon"><i class="ri-trophy-line"></i></div>
+                        <div class="empty-title">Hoàn thành!</div>
+                        <div class="flash-summary-stats">
+                            <div class="flash-summary-stat known"><b id="flashSumKnown">0</b><span>đã thuộc</span></div>
+                            <div class="flash-summary-stat unknown"><b id="flashSumUnknown">0</b><span>chưa thuộc</span></div>
+                        </div>
+                        <div class="flash-summary-actions">
+                            <button class="flash-gen-btn" id="flashReviewBtn" onclick="reviewUnknown()">
+                                <i class="ri-repeat-line"></i> Học lại từ chưa thuộc
+                            </button>
+                            <button class="flash-gen-btn" onclick="learnMoreWords()">
+                                <i class="ri-add-line"></i> Học tiếp từ mới
+                            </button>
+                            <button class="flash-nav-btn" onclick="restartDeck()">
+                                <i class="ri-refresh-line"></i> Học lại từ đầu
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== TAB: BÀI ĐỌC SONG NGỮ ===== -->
+            <div class="tab-content" id="tab-reading">
+                <div class="reading-wrap">
+                    <!-- Danh sách bài đọc -->
+                    <div id="readingListView">
+                        <div class="reading-head">
+                            <h1><i class="ri-book-open-line"></i> Bài đọc song ngữ <span class="reading-count-badge" id="readingCount"></span></h1>
+                            <p>Bấm vào từ tiếng Anh bất kỳ để tra nghĩa và lưu vào Từ vựng. Làm quiz và hỏi AI về bài đọc.</p>
+                            <div class="reading-filters" id="readingFilters"></div>
+                        </div>
+                        <div class="reading-grid" id="readingGrid"></div>
+                    </div>
+                    <!-- Đọc bài -->
+                    <div id="readingArticleView" style="display:none">
+                        <button class="reading-back" onclick="backToReadingList()">
+                            <i class="ri-arrow-left-line"></i> Danh sách bài đọc
+                        </button>
+                        <div class="reading-cols">
+                            <div class="reading-card">
+                                <div class="reading-card-head">
+                                    <div class="langpills" id="readingLangPills">
+                                        <button data-m="both" class="on">Song ngữ</button>
+                                        <button data-m="en">Tiếng Anh</button>
+                                        <button data-m="vi">Bản dịch</button>
+                                    </div>
+                                    <button class="reading-fs-btn" onclick="toggleReadingFullscreen()"><i class="ri-fullscreen-line"></i> Toàn màn hình</button>
+                                </div>
+                                <div class="reading-title-row">
+                                    <div class="reading-avatar" id="readingAvatar"></div>
+                                    <div>
+                                        <div class="reading-cat" id="readingCat"></div>
+                                        <p class="reading-desc" id="readingDesc"></p>
+                                    </div>
+                                </div>
+                                <div class="reading-meta" id="readingMeta"></div>
+                                <div id="readingParas"></div>
+                            </div>
+                            <div class="reading-sidecol">
+                                <div class="reading-card reading-sidepanel">
+                                    <div class="reading-tabs" id="readingTabs">
+                                        <button data-t="info" class="on"><i class="ri-information-line"></i> Thông tin</button>
+                                        <button data-t="vocab"><i class="ri-book-2-line"></i> Từ vựng <span class="cnt" id="readingVocabCnt">0</span></button>
+                                        <button data-t="ideas"><i class="ri-lightbulb-line"></i> Ý chính <span class="cnt" id="readingIdeasCnt">0</span></button>
+                                        <button data-t="quiz"><i class="ri-question-answer-line"></i> Câu hỏi <span class="cnt" id="readingQuizCnt">0</span></button>
+                                    </div>
+                                    <div id="readingTabBody"></div>
+                                </div>
+                                <div class="reading-card">
+                                    <div class="reading-ai-promo">
+                                        <b><i class="ri-sparkles-line"></i> Thử tính năng mới</b>
+                                        <p>AI đã đọc sẵn bài này. Bấm nút để hỏi bất cứ điều gì về bài đọc.</p>
+                                        <button class="rp-ai" onclick="openReadingDrawer()"><i class="ri-chat-smile-2-line"></i> Hỏi AI ngay</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="readingFab" onclick="openReadingDrawer()" title="Hỏi AI về bài đọc" style="display:none">
+                    <i class="ri-chat-smile-2-line"></i>
+                </button>
+                <div id="readingDrawer">
+                    <div class="rd-head">
+                        <div>
+                            <h3>Hỏi AI về bài đọc</h3>
+                            <p id="readingDrawerSub"></p>
+                        </div>
+                        <button class="rd-close" onclick="closeReadingDrawer()"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div id="readingMsgs"></div>
+                    <details class="rd-prompt">
+                        <summary>Xem prompt gửi cho AI</summary>
+                        <pre id="readingPromptView"></pre>
+                    </details>
+                    <div id="readingChips"></div>
+                    <div class="rd-inputbar">
+                        <input id="readingQInput" placeholder="Hỏi gì đó về bài đọc..." autocomplete="off">
+                        <button id="readingSendBtn" onclick="sendReadingQ()"><i class="ri-send-plane-fill"></i></button>
+                    </div>
+                </div>
+                <div id="readingToast"></div>
+            </div>
+
+            <!-- TAB LUYỆN NGHE -->
+            <div class="tab-content" id="tab-listening">
+                <div class="listen-wrap" id="listenRoot"></div>
+            </div>
+
+            <!-- TAB BÀI HỌC AI -->
+            <div class="tab-content" id="tab-lesson">
+                <div class="lesson-wrap">
+                    <div class="lesson-head">
+                        <h1><i class="ri-sparkles-line"></i> Bài học AI</h1>
+                        <p>Nhập chủ đề bất kỳ — AI soạn bài học gồm từ vựng, hội thoại và bài tập, chấm điểm tự động.</p>
+                    </div>
+                    <!-- 09/10/2026: sub-tab Từ vựng | Ngữ pháp -->
+                    <div class="lesson-subnav">
+                        <button class="lsub active" id="lsubVocab" onclick="switchLessonTab('vocab')"><i class="ri-book-2-line"></i> Từ vựng theo chủ đề</button>
+                        <button class="lsub" id="lsubGrammar" onclick="switchLessonTab('grammar')"><i class="ri-article-line"></i> Ngữ pháp</button>
+                    </div>
+                    <div id="lessonVocabWrap">
+                    <div id="lessonGenView">
+                        <div class="lesson-genbox">
+                            <input id="lessonTopicInput" placeholder="VD: đi chợ, phỏng vấn xin việc, du lịch biển..." autocomplete="off" maxlength="100">
+                            <button id="lessonGenBtn" onclick="generateLesson()"><i class="ri-sparkles-line"></i> Soạn bài</button>
+                        </div>
+                        <div class="lesson-topics">
+                            <span>Gợi ý:</span>
+                            <button onclick="setLessonTopic('đi siêu thị')">đi siêu thị</button>
+                            <button onclick="setLessonTopic('phỏng vấn xin việc')">phỏng vấn xin việc</button>
+                            <button onclick="setLessonTopic('đặt phòng khách sạn')">đặt phòng khách sạn</button>
+                            <button onclick="setLessonTopic('khám bệnh')">khám bệnh</button>
+                            <button onclick="setLessonTopic('du lịch biển')">du lịch biển</button>
+                        </div>
+                        <div id="lessonLoading" style="display:none">
+                            <div class="spinner-sm" style="width:28px;height:28px"></div>
+                            <p>AI đang soạn bài học, chờ chút nhé...</p>
+                        </div>
+                    </div>
+                    <div id="lessonView" style="display:none"></div>
+                    </div><!-- /lessonVocabWrap -->
+                    <!-- 09/10/2026: mục Ngữ pháp -->
+                    <div id="lessonGrammarWrap" style="display:none">
+                        <div id="grammarTopics"></div>
+                        <div id="grammarLoading" style="display:none">
+                            <div class="spinner-sm" style="width:28px;height:28px"></div>
+                            <p>AI đang soạn bài ngữ pháp, chờ chút nhé...</p>
+                        </div>
+                        <div id="grammarView" style="display:none"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB TIẾN BỘ -->
+            <div class="tab-content" id="tab-progress">
+                <div class="progress-wrap">
+                    <div class="lesson-head">
+                        <h1><i class="ri-line-chart-line"></i> Tiến bộ học tập</h1>
+                        <p>Điểm quiz bài đọc và bài tập bài học AI được lưu tự động trên máy này.</p>
+                    </div>
+                    <div id="progressBody"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== CHỌN CÁCH HỌC (08/10/2026): Nạp sâu ghi nhớ / Nạp nhanh Flashcard ===== -->
+    <div class="learn-backdrop" id="learnBackdrop" style="display:none" onclick="if(event.target===this)hideLearnModal()">
+        <div class="learn-modal">
+            <button class="learn-close" onclick="hideLearnModal()"><i class="ri-close-line"></i></button>
+            <h3>Chọn cách học</h3>
+            <div class="learn-deckname" id="learnDeckName">Oxford 3000</div>
+            <button class="learn-opt" onclick="startDeepLearn()">
+                <span class="learn-opt-icon"><i class="ri-graduation-cap-line"></i></span>
+                <span class="learn-opt-text"><b>Nạp sâu ghi nhớ</b><small>Học kỹ từng từ qua nhiều dạng bài</small></span>
+            </button>
+            <button class="learn-opt" onclick="startDeckQuick()">
+                <span class="learn-opt-icon"><i class="ri-layers-line"></i></span>
+                <span class="learn-opt-text"><b>Nạp nhanh với Flashcard</b><small>Lật thẻ, tự chấm, lặp lại trong phiên</small></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== AUTH MODAL (08/10/2026): đăng nhập để học ===== -->
+    <div class="auth-backdrop" id="authBackdrop" style="display:none" onclick="if(event.target===this)hideAuthModal()">
+        <div class="auth-modal">
+            <button class="auth-close" onclick="hideAuthModal()"><i class="ri-close-line"></i></button>
+            <div class="auth-logo"><i class="ri-book-open-line"></i></div>
+            <h3 id="authTitle">Đăng nhập</h3>
+            <p class="auth-sub" id="authSub">Đăng nhập để học</p>
+
+            <!-- Đăng nhập -->
+            <div id="authLoginView">
+                <input class="auth-input" id="loginEmail" type="email" placeholder="Email" autocomplete="email">
+                <input class="auth-input" id="loginPassword" type="password" placeholder="Mật khẩu" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+                <div class="auth-err" id="loginErr"></div>
+                <button class="auth-btn" onclick="doLogin()">Đăng nhập</button>
+                <div class="auth-links">
+                    <a onclick="showAuthView('register')">Đăng ký</a>
+                    <a onclick="showAuthView('forgot')">Quên mật khẩu?</a>
+                </div>
+            </div>
+
+            <!-- Đăng ký -->
+            <div id="authRegisterView" style="display:none">
+                <input class="auth-input" id="regName" type="text" placeholder="Tên hiển thị" autocomplete="name">
+                <input class="auth-input" id="regEmail" type="email" placeholder="Email" autocomplete="email">
+                <input class="auth-input" id="regPassword" type="password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+                <div class="auth-err" id="regErr"></div>
+                <button class="auth-btn" onclick="doRegister()">Đăng ký</button>
+                <div class="auth-links">
+                    <a onclick="showAuthView('login')">Đã có tài khoản? Đăng nhập</a>
+                </div>
+            </div>
+
+            <!-- Quên mật khẩu -->
+            <div id="authForgotView" style="display:none">
+                <p class="auth-sub">Nhập email đã đăng ký, mình sẽ gửi link đặt lại mật khẩu.</p>
+                <input class="auth-input" id="forgotEmail" type="email" placeholder="Email" onkeydown="if(event.key==='Enter')doForgot()">
+                <div class="auth-err" id="forgotErr"></div>
+                <div class="auth-ok" id="forgotOk"></div>
+                <button class="auth-btn" onclick="doForgot()">Gửi link đặt lại</button>
+                <div class="auth-links">
+                    <a onclick="showAuthView('login')">Quay lại đăng nhập</a>
+                </div>
+            </div>
+
+            <!-- Đặt lại mật khẩu (qua link email) -->
+            <div id="authResetView" style="display:none">
+                <p class="auth-sub">Nhập mật khẩu mới cho tài khoản của bạn.</p>
+                <input class="auth-input" id="resetPassword" type="password" placeholder="Mật khẩu mới (tối thiểu 6 ký tự)" autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
+                <div class="auth-err" id="resetErr"></div>
+                <div class="auth-ok" id="resetOk"></div>
+                <button class="auth-btn" onclick="doResetPassword()">Đặt lại mật khẩu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js?v=15"></script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+{
+  "count": 56,
+  "levels": [
+    "A1",
+    "A2",
+    "B1",
+    "B2"
+  ],
+  "topics": [
+    {
+      "id": "to-be",
+      "title": "Động từ to be (am/is/are)",
+      "en": "Verb to be",
+      "level": "A1",
+      "desc": "Nói tôi là ai, ai ở đâu, cảm thấy thế nào"
+    },
+    {
+      "id": "present-simple",
+      "title": "Hiện tại đơn",
+      "en": "Present simple",
+      "level": "A1",
+      "desc": "Thói quen, sự thật hiển nhiên"
+    },
+    {
+      "id": "articles",
+      "title": "Mạo từ a/an/the",
+      "en": "Articles",
+      "level": "A1",
+      "desc": "Khi nào dùng a, an, the"
+    },
+    {
+      "id": "plural-nouns",
+      "title": "Danh từ số nhiều",
+      "en": "Plural nouns",
+      "level": "A1",
+      "desc": "Quy tắc thêm -s/-es và dạng bất quy tắc"
+    },
+    {
+      "id": "pronouns",
+      "title": "Đại từ & sở hữu",
+      "en": "Pronouns and possessives",
+      "level": "A1",
+      "desc": "I/me/my/mine, he/him/his..."
+    },
+    {
+      "id": "there-is-are",
+      "title": "There is / There are",
+      "en": "There is/are",
+      "level": "A1",
+      "desc": "Nói có cái gì ở đâu"
+    },
+    {
+      "id": "prepositions-basic",
+      "title": "Giới từ cơ bản (in/on/at)",
+      "en": "Basic prepositions",
+      "level": "A1",
+      "desc": "Chỉ nơi chốn và thời gian"
+    },
+    {
+      "id": "adjectives-basic",
+      "title": "Tính từ & trật tự từ",
+      "en": "Basic adjectives",
+      "level": "A1",
+      "desc": "Vị trí tính từ trong câu"
+    },
+    {
+      "id": "past-simple",
+      "title": "Quá khứ đơn",
+      "en": "Past simple",
+      "level": "A2",
+      "desc": "Việc đã xong trong quá khứ"
+    },
+    {
+      "id": "present-continuous",
+      "title": "Hiện tại tiếp diễn",
+      "en": "Present continuous",
+      "level": "A2",
+      "desc": "Việc đang diễn ra"
+    },
+    {
+      "id": "future-will-going-to",
+      "title": "Tương lai: will / be going to",
+      "en": "Future forms",
+      "level": "A2",
+      "desc": "Dự định và dự đoán"
+    },
+    {
+      "id": "comparatives",
+      "title": "So sánh hơn",
+      "en": "Comparatives",
+      "level": "A2",
+      "desc": "taller, more beautiful"
+    },
+    {
+      "id": "superlatives",
+      "title": "So sánh nhất",
+      "en": "Superlatives",
+      "level": "A2",
+      "desc": "the tallest, the most beautiful"
+    },
+    {
+      "id": "some-any",
+      "title": "some / any / much / many",
+      "en": "Quantifiers",
+      "level": "A2",
+      "desc": "Lượng từ cơ bản"
+    },
+    {
+      "id": "can-could",
+      "title": "Can / Could",
+      "en": "Can and could",
+      "level": "A2",
+      "desc": "Khả năng và xin phép"
+    },
+    {
+      "id": "adverbs-frequency",
+      "title": "Trạng từ tần suất",
+      "en": "Adverbs of frequency",
+      "level": "A2",
+      "desc": "always, usually, never và vị trí"
+    },
+    {
+      "id": "countable-uncountable",
+      "title": "Đếm được / không đếm được",
+      "en": "Countable nouns",
+      "level": "A2",
+      "desc": "a few/few, a little/little"
+    },
+    {
+      "id": "conjunctions-basic",
+      "title": "Liên từ cơ bản",
+      "en": "Basic conjunctions",
+      "level": "A2",
+      "desc": "and, but, because, so"
+    },
+    {
+      "id": "present-perfect",
+      "title": "Hiện tại hoàn thành",
+      "en": "Present perfect",
+      "level": "B1",
+      "desc": "Việc đã làm, liên quan hiện tại"
+    },
+    {
+      "id": "past-perfect-intro",
+      "title": "Quá khứ hoàn thành (cơ bản)",
+      "en": "Past perfect",
+      "level": "B1",
+      "desc": "Việc xong trước một mốc quá khứ"
+    },
+    {
+      "id": "passive-basic",
+      "title": "Bị động (hiện tại & quá khứ)",
+      "en": "Passive voice",
+      "level": "B1",
+      "desc": "be + V3/ed"
+    },
+    {
+      "id": "conditional-1",
+      "title": "Câu điều kiện loại 1",
+      "en": "First conditional",
+      "level": "B1",
+      "desc": "Điều kiện có thật ở tương lai"
+    },
+    {
+      "id": "conditional-2",
+      "title": "Câu điều kiện loại 2",
+      "en": "Second conditional",
+      "level": "B1",
+      "desc": "Điều kiện không có thật ở hiện tại"
+    },
+    {
+      "id": "reported-speech-basic",
+      "title": "Tường thuật cơ bản",
+      "en": "Reported speech",
+      "level": "B1",
+      "desc": "said/told + lùi thì"
+    },
+    {
+      "id": "modals",
+      "title": "Động từ khuyết thiếu",
+      "en": "Modal verbs",
+      "level": "B1",
+      "desc": "must, have to, should, may, might"
+    },
+    {
+      "id": "gerund-infinitive",
+      "title": "Gerund & Infinitive",
+      "en": "Gerund and infinitive",
+      "level": "B1",
+      "desc": "V-ing hay to-V sau động từ"
+    },
+    {
+      "id": "relative-clauses",
+      "title": "Mệnh đề quan hệ",
+      "en": "Relative clauses",
+      "level": "B1",
+      "desc": "who, which, that"
+    },
+    {
+      "id": "used-to",
+      "title": "Used to",
+      "en": "Used to",
+      "level": "B1",
+      "desc": "Thói quen trong quá khứ"
+    },
+    {
+      "id": "so-such",
+      "title": "So / Such",
+      "en": "So and such",
+      "level": "B1",
+      "desc": "Nhấn mạnh mức độ"
+    },
+    {
+      "id": "too-enough",
+      "title": "Too / Enough",
+      "en": "Too and enough",
+      "level": "B1",
+      "desc": "Quá... / đủ..."
+    },
+    {
+      "id": "conditional-3",
+      "title": "Câu điều kiện loại 3",
+      "en": "Third conditional",
+      "level": "B2",
+      "desc": "Điều kiện không có thật ở quá khứ"
+    },
+    {
+      "id": "conditional-mixed",
+      "title": "Điều kiện hỗn hợp",
+      "en": "Mixed conditionals",
+      "level": "B2",
+      "desc": "Trộn loại 2 và 3"
+    },
+    {
+      "id": "reported-speech-full",
+      "title": "Tường thuật đầy đủ",
+      "en": "Reported speech full",
+      "level": "B2",
+      "desc": "Câu hỏi, mệnh lệnh tường thuật"
+    },
+    {
+      "id": "passive-all",
+      "title": "Bị động mọi thì",
+      "en": "Passive all tenses",
+      "level": "B2",
+      "desc": "Bị động hoàn thành, tiếp diễn"
+    },
+    {
+      "id": "wish",
+      "title": "Wish / If only",
+      "en": "Wish clauses",
+      "level": "B2",
+      "desc": "Ước muốn trái thực tế"
+    },
+    {
+      "id": "relative-reduced",
+      "title": "Mệnh đề quan hệ rút gọn",
+      "en": "Reduced relatives",
+      "level": "B2",
+      "desc": "Rút gọn who/which + V"
+    },
+    {
+      "id": "inversion",
+      "title": "Đảo ngữ cơ bản",
+      "en": "Inversion",
+      "level": "B2",
+      "desc": "Never, Not only..."
+    },
+    {
+      "id": "cleft",
+      "title": "Câu chẻ cơ bản",
+      "en": "Cleft sentences",
+      "level": "B2",
+      "desc": "It is... that/who nhấn mạnh"
+    },
+    {
+      "id": "future-perfect",
+      "title": "Tương lai hoàn thành & tiếp diễn",
+      "en": "Future perfect",
+      "level": "B2",
+      "desc": "will have done, will be doing"
+    },
+    {
+      "id": "modal-perfect",
+      "title": "Modal perfect",
+      "en": "Modal perfect",
+      "level": "B2",
+      "desc": "should have done, must have done"
+    },
+    {
+      "id": "c1-inversion",
+      "level": "C1",
+      "title": "Đảo ngữ",
+      "en": "Inversion",
+      "desc": "Đảo trợ động từ lên trước chủ ngữ để nhấn mạnh: Never have I seen..."
+    },
+    {
+      "id": "c1-cleft",
+      "level": "C1",
+      "title": "Câu chẻ",
+      "en": "Cleft sentences",
+      "desc": "Nhấn mạnh thành phần câu: It was Lan who broke it."
+    },
+    {
+      "id": "c1-participle-clauses",
+      "level": "C1",
+      "title": "Mệnh đề phân từ",
+      "en": "Participle clauses",
+      "desc": "Rút gọn mệnh đề bằng V-ing/V3: Walking home, I saw..."
+    },
+    {
+      "id": "c1-mixed-conditionals",
+      "level": "C1",
+      "title": "Câu điều kiện hỗn hợp",
+      "en": "Mixed conditionals",
+      "desc": "If quá khứ + would have V3 và ngược lại."
+    },
+    {
+      "id": "c1-subjunctive",
+      "level": "C1",
+      "title": "Thức giả định",
+      "en": "Subjunctive",
+      "desc": "It's vital that he be here; I suggest she go."
+    },
+    {
+      "id": "c1-modals-deduction",
+      "level": "C1",
+      "title": "Động từ khuyết thiếu suy luận",
+      "en": "Modals of deduction",
+      "desc": "Suy luận quá khứ: must/can't/might have done."
+    },
+    {
+      "id": "c1-emphasis",
+      "level": "C1",
+      "title": "Cấu trúc nhấn mạnh",
+      "en": "Emphasis structures",
+      "desc": "do/does/did nhấn mạnh; mệnh đề what-."
+    },
+    {
+      "id": "c1-noun-clauses",
+      "level": "C1",
+      "title": "Mệnh đề danh ngữ nâng cao",
+      "en": "Advanced noun clauses",
+      "desc": "whatever, whoever, whether...or."
+    },
+    {
+      "id": "c1-apposition",
+      "level": "C1",
+      "title": "Cụm đồng vị",
+      "en": "Apposition",
+      "desc": "Cụm giải thích đứng cạnh danh từ: My brother, a doctor, lives in Hanoi."
+    },
+    {
+      "id": "c1-nominalization",
+      "level": "C1",
+      "title": "Danh từ hoá",
+      "en": "Nominalization",
+      "desc": "Biến động từ/tính từ thành danh từ cho văn viết học thuật: develop → development."
+    },
+    {
+      "id": "c2-ellipsis",
+      "level": "C2",
+      "title": "Lược bỏ và thay thế",
+      "en": "Ellipsis & substitution",
+      "desc": "Lược từ tránh lặp: so, too, do so."
+    },
+    {
+      "id": "c2-fronting",
+      "level": "C2",
+      "title": "Đảo trật tự trong văn bản",
+      "en": "Fronting",
+      "desc": "Đưa thành phần lên đầu câu để nối mạch văn."
+    },
+    {
+      "id": "c2-reported-advanced",
+      "level": "C2",
+      "title": "Câu tường thuật nâng cao",
+      "en": "Advanced reported speech",
+      "desc": "Động từ tường thuật đa dạng + distancing."
+    },
+    {
+      "id": "c2-unreal-past",
+      "level": "C2",
+      "title": "Unreal past",
+      "en": "Unreal past",
+      "desc": "wish/if only, would rather, it's (high) time."
+    },
+    {
+      "id": "c2-complex-passive",
+      "level": "C2",
+      "title": "Bị động phức tạp",
+      "en": "Complex passives",
+      "desc": "is said to do; have/get something done."
+    },
+    {
+      "id": "c2-conditional-no-if",
+      "level": "C2",
+      "title": "Điều kiện không dùng if",
+      "en": "Conditionals without if",
+      "desc": "unless, provided that, as long as, đảo ngữ."
+    }
+  ]
+}
