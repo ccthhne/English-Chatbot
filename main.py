@@ -1145,11 +1145,12 @@ async def topic_words(group: str = "du-lich", count: int = 15):
 @app.get("/api/random-vocab")
 async def random_vocab():
     """1 tu ngau nhien co san vi du song ngu (cho the trang chu).
-    Pool: TOEIC 3 band (A2/B1/B2)."""
+    Pool: TOEIC 3 band (A2/B1/B2) + Oxford C1."""
     all_toeic = TOEIC_BASIC + TOEIC_B1 + TOEIC_B2
     pool = [w for w in all_toeic if (w.get("example") or "").strip()
             and (w.get("example_vi") or "").strip()
             and (w.get("meaning") or "").strip()]
+    pool = pool + _get_random_vocab_c1_pool()
     if not pool:
         return {"error": "Khong co tu nao co vi du song ngu"}
     w = random.choice(pool)
@@ -1164,6 +1165,60 @@ async def random_vocab():
         "example_vi": (w.get("example_vi") or "").strip(),
         "level": wlv, "color": CEFR_COLORS.get(wlv, "#6366f1"),
     }
+
+
+_RANDOM_VOCAB_C1_POOL = None
+
+def _get_random_vocab_c1_pool():
+    """Pool tu C1 (Oxford 3000/5000) cho /api/random-vocab.
+    Nghia Viet: dictionary.db; vi du song ngu: Tatoeba.
+    Chi giu tu co du nghia + vi du. Build 1 lan luc server khoi dong, cache lai."""
+    global _RANDOM_VOCAB_C1_POOL
+    if _RANDOM_VOCAB_C1_POOL is not None:
+        return _RANDOM_VOCAB_C1_POOL
+    pool = []
+    try:
+        vi_words = _words_with_vi_meaning() or set()
+        n_c1 = n_vi = n_mean = n_ex = 0
+        for w, score in OXFORD_LEVELS.items():
+            if _score_to_cefr(score) != "C1":
+                continue
+            n_c1 += 1
+            if w.lower() not in vi_words:
+                continue
+            n_vi += 1
+            ipa, meanings = _lookup_word_details(w)
+            if not meanings:
+                continue
+            n_mean += 1
+            ex = _tatoeba_first(w)
+            if not (ex.get("en") or "").strip():
+                continue
+            n_ex += 1
+            first = meanings[0]
+            defs = first.get("definitions") or []
+            meaning = (defs[0] if defs else "").strip()
+            if not meaning:
+                continue
+            pool.append({
+                "word": w,
+                "pos": first.get("pos", ""),
+                "ipa": ipa or "",
+                "meaning": meaning,
+                "example": ex["en"].strip(),
+                "example_vi": (ex.get("vi") or "").strip(),
+                "cefr": "C1",
+            })
+        print(f"[DATA] random-vocab C1 debug: C1={n_c1} vi={n_vi} meaning={n_mean} tatoeba={n_ex} pool={len(pool)}", flush=True)
+    except Exception as _e:
+        print(f"[WARN] random-vocab C1 pool loi: {_e}", flush=True)
+        pool = []
+    _RANDOM_VOCAB_C1_POOL = pool
+    return pool
+
+
+# Pre-build pool C1 luc server khoi dong de request dau tien khong bi treo.
+# (Dat o cuoi file de cac ham phu tro nhu _score_to_cefr da duoc dinh nghia.)
 
 
 def _tatoeba_first(word: str) -> dict:
@@ -2721,3 +2776,10 @@ def build_highlighted(text: str, word_levels: dict, lemma_map: dict | None = Non
         cursor = match.end()
     parts.append(html.escape(text[cursor:]))
     return "".join(parts)
+# Pre-build pool C1 cho /api/random-vocab luc server khoi dong
+# (de o cuoi file de _score_to_cefr va cac ham khac da duoc dinh nghia).
+try:
+    _c1pool = _get_random_vocab_c1_pool()
+    print(f"[DATA] random-vocab C1 pool: {len(_c1pool)} tu", flush=True)
+except Exception as _e:
+    print(f"[WARN] random-vocab C1 pool build that bai: {_e}", flush=True)
