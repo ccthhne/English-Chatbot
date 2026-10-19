@@ -7,7 +7,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    /* 12/10/2026: theme SÁNG (mặc định) — sữa + caramel (demo đã duyệt) */
+    /* theme SÁNG (mặc định) — sữa + caramel (demo đã duyệt) */
     --bg:           #f7f2e9;
     --panel:        #fffdf8;
     --panel-2:      #f0e7d5;
@@ -206,6 +206,7 @@ html, body {
 
 .sidebar-history {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     padding: 4px 8px;
 }
@@ -484,7 +485,7 @@ html, body {
     max-width: 80%;
     font-size: 14px;
     line-height: 1.8;
-    color: #dce6f0;
+    color: var(--text);
     word-break: break-word;
 }
 
@@ -528,11 +529,11 @@ html, body {
 .msg-bubble pre code {
     background: transparent;
     padding: 0;
-    color: #e2e8f0;
+    color: var(--text);
 }
 
-.msg-bubble strong { color: #f1f5f9; font-weight: 600; }
-.msg-bubble em { color: #94a3b8; }
+.msg-bubble strong { color: var(--text); font-weight: 600; }
+.msg-bubble em { color: var(--muted); }
 
 .msg-bubble hr {
     border: none;
@@ -1099,7 +1100,7 @@ html, body {
 
 /* ── Tooltip ── */
 /* ════════════════════════════════════════════════
-   TOOLTIP TRA TỪ — layout popup mẫu, màu theme nâu tối (05/10/2026)
+   TOOLTIP TRA TỪ — layout popup mẫu, màu theme nâu tối 
    Header: từ + loa + sao lưu + đóng | IPA | badge POS màu
    Nghĩa gom theo từng loại từ (nhãn teal)
    ════════════════════════════════════════════════ */
@@ -1111,7 +1112,7 @@ html, body {
     max-height: 380px;
     display: flex;
     flex-direction: column;
-    /* 10/10/2026: cả tooltip scroll chung — trước đây .tip-groups scroll riêng
+    /* cả tooltip scroll chung — trước đây .tip-groups scroll riêng
        nên khi extras (đồng nghĩa/ví dụ) load xong, flex bóp vùng nghĩa lại
        thành khe nhỏ, người dùng tưởng nghĩa "bị nhảy mất". */
     overflow-y: auto;
@@ -1129,7 +1130,7 @@ html, body {
     transition: opacity .15s;
 }
 .word-tooltip.visible { opacity: 1; pointer-events: auto; }
-/* 12/10/2026: tooltip tra từ luôn nền tối ở cả 2 theme (popup tối là chuẩn UI) */
+/* tooltip tra từ luôn nền tối ở cả 2 theme (popup tối là chuẩn UI) */
 .word-tooltip {
     --text: #ede8db;
     --muted: #a79c88;
@@ -1206,7 +1207,7 @@ html, body {
 .tip-group-defs li { font-size: 13.5px; color: var(--text); line-height: 1.65; }
 .tip-group-defs li + li { margin-top: 2px; }
 
-/* Đồng nghĩa / trái nghĩa (WordNet) + câu ví dụ (Tatoeba) — 07/10/2026 */
+/* Đồng nghĩa / trái nghĩa (WordNet) + câu ví dụ (Tatoeba) */
 .tip-extra { flex-shrink: 0; margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); }
 .tip-extra-label {
     font-size: 13px; font-style: italic; font-weight: 600; color: #2dd4bf;
@@ -1239,10 +1240,10 @@ html, body {
 .swp-audio .tip-audio-btn:active { transform: scale(0.9); }
 
 /* ══════════════════════════════════════
-   BÀI HỌC AI + TIẾN BỘ (05/10/2026)
+   BÀI HỌC AI + TIẾN BỘ 
    ══════════════════════════════════════ */
 .lesson-wrap, .progress-wrap { max-width: 860px; margin: 0 auto; padding: 24px; }
-/* 12/10/2026: tab Ngữ pháp full-width (không scroll ngang, grid tự wrap) */
+/* tab Ngữ pháp full-width (không scroll ngang, grid tự wrap) */
 .lesson-wrap.wide { max-width: 1400px; }
 .lesson-head h1 { font-size: 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
 .lesson-head h1 i { color: var(--link); }
@@ -2135,7 +2136,7 @@ html, body {
 }
 
 /* ============================================================
-   BÀI ĐỌC SONG NGỮ (thêm 04/10/2026)
+   BÀI ĐỌC SONG NGỮ
 ============================================================ */
 .reading-wrap { max-width: none; margin: 0 auto; padding: 24px; overflow-y: auto; height: 100%; }
 .reading-head h1 { font-size: 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
@@ -2333,8 +2334,8 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
     border-radius: 999px; font-size: 14px; opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; }
 #readingToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ===== TRANG CHỦ (06/10/2026) ===== */
-/* 12/10/2026: Khám phá sang cột phải — wrap rộng 1280px, 2 cột */
+/* ===== TRANG CHỦ  ===== */
+/* Khám phá sang cột phải — wrap rộng 1280px, 2 cột */
 .home-wrap { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; display: flex; flex-direction: column; gap: 26px; }
 .home-cols { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 22px; align-items: start; }
 .home-col-main { display: flex; flex-direction: column; gap: 26px; min-width: 0; }
@@ -2389,7 +2390,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 .rv-save:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #26241f; }
 .rv-save.saved { background: #dcf5e3; border-color: #1d7a3d; color: #1d7a3d; box-shadow: 3px 3px 0 #1d7a3d; }
 
-/* ===== FLASHCARD BROWSE: đề xuất + chủ đề (06/10/2026) ===== */
+/* ===== FLASHCARD BROWSE: đề xuất + chủ đề  ===== */
 .flash-quick { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
 .flash-quick-btn { flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: border-color .15s; }
 .flash-quick-btn:hover { border-color: var(--gold); }
@@ -2479,7 +2480,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 .oxd-btn:active { transform: translate(2px,2px); box-shadow: none; }
 .oxd-loading { text-align: center; padding: 40px; color: #78716c; }
 
-/* Badge "hiem" cho nghia it dung trong popup tra tu (06/10/2026) */
+/* Badge "hiem" cho nghia it dung trong popup tra tu  */
 .tip-rare-badge {
     display: inline-block; font-size: 10px; font-weight: 700;
     color: #92400e; background: #fef3c7; border: 1px solid #f59e0b;
@@ -2487,7 +2488,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
     vertical-align: 1px; white-space: nowrap;
 }
 
-/* Nut "Them tu moi" trong luc hoc flashcard (06/10/2026) */
+/* Nut "Them tu moi" trong luc hoc flashcard  */
 .flash-more-btn {
     display: inline-flex; align-items: center; gap: 5px;
     background: transparent; border: 1.5px dashed var(--muted); border-radius: 99px;
@@ -2496,7 +2497,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 }
 .flash-more-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ===== AUTH MODAL (08/10/2026): đăng nhập để học ===== */
+/* ===== AUTH MODAL : đăng nhập để học ===== */
 .auth-backdrop {
     position: fixed; inset: 0; z-index: 9999;
     background: rgba(20, 14, 8, 0.72);
@@ -2554,7 +2555,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 .auth-user-btn .ri-logout-box-r-line { font-size: 14px; opacity: 0.7; }
 
 /* ============================================================
-   TÀI LIỆU ĐÍNH KÈM TRONG CHAT (08/10/2026) — kiểu NotebookLM
+   TÀI LIỆU ĐÍNH KÈM TRONG CHAT  — kiểu NotebookLM
 ============================================================ */
 .attach-btn {
     background: none; border: none; color: var(--muted);
@@ -2627,7 +2628,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 .docs-upload-btn i { font-size: 15px; }
 
 /* ============================================================
-   CHỌN CÁCH HỌC + NẠP SÂU GHI NHỚ (08/10/2026)
+   CHỌN CÁCH HỌC + NẠP SÂU GHI NHỚ 
    Thẻ sáng trên nền tối (theo ảnh mẫu + phong cách Anki đã chốt)
 ============================================================ */
 .learn-backdrop {
@@ -2737,7 +2738,7 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 }
 
 /* ============================================================
-   NGỮ PHÁP (09/10/2026) — cây chủ đề, bài học, quiz, banner chat
+   NGỮ PHÁP  — cây chủ đề, bài học, quiz, banner chat
    ============================================================ */
 .badge{display:inline-block;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold-border);font-size:12px;font-weight:600;padding:3px 12px;border-radius:20px;margin-right:6px}
 .mini{background:transparent;color:var(--gold);border:1px solid var(--gold-border);border-radius:10px;padding:8px 14px;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px}
@@ -2746,14 +2747,14 @@ details.rd-prompt pre { margin: 0; padding: 0 14px 14px; white-space: pre-wrap; 
 .lsub{flex:1;background:var(--panel);color:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .lsub.active{background:var(--gold-soft);color:var(--gold);border-color:var(--gold-border)}
 .glevel{font-size:17px;margin:20px 0 10px;color:var(--text)}
-/* 12/10/2026: badge trình độ có màu riêng (demo đã duyệt) */
+/* badge trình độ có màu riêng (demo đã duyệt) */
 .glevel .badge.lv-A1{background:#4ade80;color:#221e17;border-color:#4ade80}
 .glevel .badge.lv-A2{background:#22d3ee;color:#221e17;border-color:#22d3ee}
 .glevel .badge.lv-B1{background:var(--gold);color:#221e17;border-color:var(--gold)}
 .glevel .badge.lv-B2{background:#fb923c;color:#221e17;border-color:#fb923c}
 .glevel .badge.lv-C1{background:#f472b6;color:#221e17;border-color:#f472b6}
 .glevel .badge.lv-C2{background:#a78bfa;color:#221e17;border-color:#a78bfa}
-.gtgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.gtgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
 .gtcard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:left;cursor:pointer;color:var(--text);font-family:inherit;display:flex;flex-direction:column;gap:6px}
 .gtcard:hover{border-color:var(--gold);transform:translateY(-1px)}
 .gtcard b{font-size:15px}
@@ -2816,7 +2817,7 @@ ul.gtight li::before{content:'\2713';position:absolute;left:2px;color:var(--gree
 @media (max-width:560px){.gtgrid{grid-template-columns:1fr 1fr}}
 
 /* ============================================================
-   LUYỆN NGHE (12/10/2026): audio VOA Learning English (public domain).
+   LUYỆN NGHE : audio VOA Learning English (public domain).
    Full-width, theo theme sáng/tối hiện tại.
    ============================================================ */
 .listen-wrap { padding: 8px 4px 60px; }
@@ -2877,3 +2878,4 @@ ul.gtight li::before{content:'\2713';position:absolute;left:2px;color:var(--gree
     font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 12px; padding: 0; }
 .src-note { font-size: 12px; color: var(--muted); margin-top: 20px; }
 .src-note a { color: var(--link); }
+

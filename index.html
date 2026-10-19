@@ -6,10 +6,10 @@
     <title>English Tutor</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="/static/style.css?v=17">
-    <!-- 12/10/2026: đặt theme sáng/tối trước khi vẽ trang để không chớp -->
+    <link rel="stylesheet" href="/static/style.css?v=26">
+    <!-- đặt theme sáng/tối trước khi vẽ trang để không chớp -->
     <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('appTheme')||'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}</script>
-    <!-- 12/10/2026: dữ liệu level Oxford nhúng sẵn từ server — vào Oxford là thấy ngay -->
+    <!-- dữ liệu level Oxford nhúng sẵn từ server — vào Oxford là thấy ngay -->
     <script>window.__OXFORD_PRELOAD__ = {{ oxford_preload | tojson }};</script>
 </head>
 <body>
@@ -47,7 +47,7 @@
                     <span>Phân tích CEFR</span>
                 </button>
                 <button class="nav-item" data-tab="flashcard" onclick="switchTab('flashcard')">
-                    <i class="ri-layers-line"></i>
+                    <i class="ri-stack-line"></i>
                     <span>Flashcard</span>
                 </button>
                 <button class="nav-item" data-tab="reading" onclick="switchTab('reading')">
@@ -59,8 +59,8 @@
                     <span>Luyện nghe</span>
                 </button>
                 <button class="nav-item" data-tab="lesson" onclick="switchTab('lesson')">
-                    <i class="ri-sparkles-line"></i>
-                    <span>Bài học AI</span>
+                    <i class="ri-edit-line"></i>
+                    <span>Từ vựng & Ngữ pháp</span>
                 </button>
                 <button class="nav-item" data-tab="progress" onclick="switchTab('progress')">
                     <i class="ri-line-chart-line"></i>
@@ -133,7 +133,7 @@
                         </button>
                     </div>
 
-                    <!-- 12/10/2026: 2 cột — trái: Tiến trình + Từ vựng ngẫu nhiên, phải: Khám phá -->
+                    <!-- 2 cột — trái: Tiến trình + Từ vựng ngẫu nhiên, phải: Khám phá -->
                     <div class="home-cols">
                     <div class="home-col-main">
                     <div class="home-sec">
@@ -183,12 +183,12 @@
                                 <i class="ri-arrow-right-line"></i>
                             </button>
                             <button class="home-link-card" onclick="switchTab('lesson')">
-                                <i class="ri-book-line"></i>
-                                <div><b>Bài học AI</b><span>Nhập chủ đề, AI soạn bài + chấm bài</span></div>
+                                <i class="ri-edit-line"></i>
+                                <div><b>Từ vựng & Ngữ pháp</b><span>Nhập chủ đề, AI soạn bài + chấm bài</span></div>
                                 <i class="ri-arrow-right-line"></i>
                             </button>
                             <button class="home-link-card" onclick="switchTab('flashcard')">
-                                <i class="ri-bank-card-line"></i>
+                                <i class="ri-stack-line"></i>
                                 <div><b>Flashcard theo chủ đề</b><span>Oxford 3000/5000, 6 chủ đề đời sống</span></div>
                                 <i class="ri-arrow-right-line"></i>
                             </button>
@@ -240,7 +240,7 @@
                     </div>
                 </div>
 
-                <!-- 09/10/2026: banner chế độ hỏi đáp theo chủ đề ngữ pháp -->
+                <!-- banner chế độ hỏi đáp theo chủ đề ngữ pháp -->
                 <div class="grammar-banner" id="grammarBanner" style="display:none">
                     <i class="ri-focus-3-line"></i>
                     <span>Hỏi đáp phần: <b id="grammarBannerTitle"></b></span>
@@ -274,7 +274,7 @@
                     <div class="composer-hint">Enter để gửi · Shift+Enter xuống dòng</div>
                 </div>
 
-                <!-- Popup đính kèm tài liệu (08/10/2026): chọn file để chatbot trả lời theo nội dung file -->
+                <!-- Popup đính kèm tài liệuchọn file để chatbot trả lời theo nội dung file -->
                 <div class="docs-popup" id="docsPopup" style="display:none">
                     <div class="docs-popup-head">
                         <span><i class="ri-file-text-line"></i> Tài liệu đính kèm</span>
@@ -436,7 +436,7 @@
 
                     <!-- Empty state -->
                     <div class="flash-empty" id="flashEmpty">
-                        <div class="empty-icon"><i class="ri-layers-line"></i></div>
+                        <div class="empty-icon"><i class="ri-stack-line"></i></div>
                         <div class="empty-title" id="flashEmptyTitle">Chưa có từ nào được lưu</div>
                         <div class="empty-sub" id="flashEmptySub">Tra từ trong Chat rồi bấm "Lưu từ này" để thêm vào bộ flashcard.</div>
                     </div>
@@ -508,7 +508,7 @@
                         </div>
                     </div>
 
-                    <!-- Nạp sâu ghi nhớ (08/10/2026): hiện luôn từ + nghĩa + ví dụ, chấm 1/2/3 -->
+                    <!-- Nạp sâu ghi nhớhiện luôn từ + nghĩa + ví dụ, chấm 1/2/3 -->
                     <div class="deep-wrap" id="deepWrap" style="display:none">
                         <div class="deep-progress-row">
                             <div class="flash-progress-track"><div class="flash-progress-bar" id="deepProgressBar"></div></div>
@@ -667,10 +667,10 @@
             <div class="tab-content" id="tab-lesson">
                 <div class="lesson-wrap">
                     <div class="lesson-head">
-                        <h1><i class="ri-sparkles-line"></i> Bài học AI</h1>
+                        <h1><i class="ri-edit-line"></i> Từ vựng & Ngữ pháp</h1>
                         <p>Nhập chủ đề bất kỳ — AI soạn bài học gồm từ vựng, hội thoại và bài tập, chấm điểm tự động.</p>
                     </div>
-                    <!-- 09/10/2026: sub-tab Từ vựng | Ngữ pháp -->
+                    <!-- sub-tab Từ vựng | Ngữ pháp -->
                     <div class="lesson-subnav">
                         <button class="lsub active" id="lsubVocab" onclick="switchLessonTab('vocab')"><i class="ri-book-2-line"></i> Từ vựng theo chủ đề</button>
                         <button class="lsub" id="lsubGrammar" onclick="switchLessonTab('grammar')"><i class="ri-article-line"></i> Ngữ pháp</button>
@@ -696,7 +696,7 @@
                     </div>
                     <div id="lessonView" style="display:none"></div>
                     </div><!-- /lessonVocabWrap -->
-                    <!-- 09/10/2026: mục Ngữ pháp -->
+                    <!-- mục Ngữ pháp -->
                     <div id="lessonGrammarWrap" style="display:none">
                         <div id="grammarTopics"></div>
                         <div id="grammarLoading" style="display:none">
@@ -722,7 +722,7 @@
         </main>
     </div>
 
-    <!-- ===== CHỌN CÁCH HỌC (08/10/2026): Nạp sâu ghi nhớ / Nạp nhanh Flashcard ===== -->
+    <!-- ===== CHỌN CÁCH HỌC: Nạp sâu ghi nhớ / Nạp nhanh Flashcard ===== -->
     <div class="learn-backdrop" id="learnBackdrop" style="display:none" onclick="if(event.target===this)hideLearnModal()">
         <div class="learn-modal">
             <button class="learn-close" onclick="hideLearnModal()"><i class="ri-close-line"></i></button>
@@ -733,13 +733,13 @@
                 <span class="learn-opt-text"><b>Nạp sâu ghi nhớ</b><small>Học kỹ từng từ qua nhiều dạng bài</small></span>
             </button>
             <button class="learn-opt" onclick="startDeckQuick()">
-                <span class="learn-opt-icon"><i class="ri-layers-line"></i></span>
+                <span class="learn-opt-icon"><i class="ri-stack-line"></i></span>
                 <span class="learn-opt-text"><b>Nạp nhanh với Flashcard</b><small>Lật thẻ, tự chấm, lặp lại trong phiên</small></span>
             </button>
         </div>
     </div>
 
-    <!-- ===== AUTH MODAL (08/10/2026): đăng nhập để học ===== -->
+    <!-- ===== AUTH MODAL: đăng nhập để học ===== -->
     <div class="auth-backdrop" id="authBackdrop" style="display:none" onclick="if(event.target===this)hideAuthModal()">
         <div class="auth-modal">
             <button class="auth-close" onclick="hideAuthModal()"><i class="ri-close-line"></i></button>
@@ -794,6 +794,6 @@
         </div>
     </div>
 
-    <script src="/static/script.js?v=16"></script>
+    <script src="/static/script.js?v=18"></script>
 </body>
 </html>
